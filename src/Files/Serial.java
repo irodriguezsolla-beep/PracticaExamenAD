@@ -2,6 +2,8 @@ package Files;
 
 import Models.Jugador;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
 import java.io.*;
 import java.util.List;
 
@@ -49,6 +51,66 @@ public class Serial {
         }
     }
 
+    //XML
+    public static void toXML(List<Jugador> listaJugadores, String ruta) {
+        XMLOutputFactory xof = XMLOutputFactory.newInstance();
+        try{
+            FileWriter fw = new FileWriter(ruta);
+            XMLStreamWriter xsw = xof.createXMLStreamWriter(fw);
+            xsw.writeStartDocument("UTF-8", "1.0");
+            xsw.writeCharacters("\n");
 
+            xsw.writeStartElement("Jugadores");
+            xsw.writeCharacters("\n");
+
+            for (Jugador j : listaJugadores) {
+                xsw.writeCharacters("  ");
+                xsw.writeStartElement("Jugador");
+                xsw.writeAttribute("id", String.valueOf(j.getId()));
+                xsw.writeCharacters("\n");
+
+                xsw.writeCharacters("    ");
+                xsw.writeStartElement("Nome");
+                xsw.writeCharacters(j.getNome() != null ? j.getNome() : "");
+                xsw.writeEndElement();
+                xsw.writeCharacters("\n");
+
+                xsw.writeCharacters("    ");
+                xsw.writeStartElement("Posición");
+                xsw.writeCharacters(j.getPosicion() != null ? j.getPosicion() : "");
+                xsw.writeEndElement();
+                xsw.writeCharacters("\n");
+
+                xsw.writeCharacters("    ");
+                xsw.writeStartElement("AnoNacemento");
+                xsw.writeCharacters(String.valueOf(j.getAnoNacemento()));
+                xsw.writeEndElement();
+                xsw.writeCharacters("\n");
+
+                xsw.writeCharacters("    ");
+                xsw.writeStartElement("descripcion");
+                xsw.writeCharacters(j.getDescripcion() != null ? j.getDescripcion() : "");
+                xsw.writeEndElement();
+                xsw.writeCharacters("\n");
+
+                xsw.writeCharacters("  ");
+                xsw.writeEndElement();
+                xsw.writeCharacters("\n");
+            }
+
+            xsw.writeEndElement();
+            xsw.writeCharacters("\n");
+            xsw.writeEndDocument();
+
+            xsw.flush();
+            xsw.close();
+            fw.close();
+            System.out.println("Arquivo XML xerado correctamente en: " + ruta);
+
+        } catch (Exception e) {
+            System.err.println("Erro : " + e.getMessage());
+        }
+
+    }
 
 }
